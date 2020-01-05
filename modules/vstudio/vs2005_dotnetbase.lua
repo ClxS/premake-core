@@ -19,11 +19,6 @@
 	dotnetbase.langObj = {}
 	dotnetbase.netcore = {}
 
-	dotnetbase.targetFormats = {}
-	dotnetbase.targetFormats.framework = {}
-	dotnetbase.targetFormats.core = {}
-	dotnetbase.targetFormats.standard = {}
-
 --
 -- Generate a Visual Studio 200x dotnet project, with support for the new platforms API.
 --
