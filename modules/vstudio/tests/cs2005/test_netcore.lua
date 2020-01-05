@@ -27,14 +27,25 @@ local function prepare()
     dn2005.netcore.targetFramework(cfg)
 end
 
---
--- Check handling of the output directory.
---
-
-function suite.targetFrameworkProperty()
+function suite.targetFrameworkProperty_core()
     dotnetframework "netcoreapp2.2"
     prepare()
     test.capture [[
-                <TargetFramework>netcoreapp2.2</TargetFramework>
+		<TargetFramework>netcoreapp2.2</TargetFramework>
+	]]
+end
+
+function suite.targetFrameworkProperty_standard()
+    dotnetframework "netstandard1.2"
+    prepare()
+    test.capture [[
+		<TargetFramework>netstandard1.2</TargetFramework>
+    ]]
+end
+
+function suite.targetFrameworkProperty_framework()
+    dotnetframework "4.7.2"
+    prepare()
+    test.capture [[
     ]]
 end
