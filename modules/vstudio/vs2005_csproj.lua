@@ -29,7 +29,7 @@
 		}
 	end
 
-	cs2005.elements.projectProperties = function ()
+	cs2005.elements.projectProperties = function (cfg)
 		return {
 			dotnetbase.configurationCondition,
 			dotnetbase.platformCondition,
@@ -40,12 +40,14 @@
 			dotnetbase.appDesignerFolder,
 			dotnetbase.rootNamespace,
 			dotnetbase.assemblyName,
+			dotnetbase.netcore.targetFramework,
 			dotnetbase.targetFrameworkVersion,
 			dotnetbase.targetFrameworkProfile,
 			dotnetbase.fileAlignment,
 			dotnetbase.bindingRedirects,
 			dotnetbase.projectTypeGuids,
-			dotnetbase.csversion
+			dotnetbase.csversion,
+			dotnetbase.netcore.enableDefaultCompileItems,
 		}
 	end
 

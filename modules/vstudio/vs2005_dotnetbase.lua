@@ -17,7 +17,12 @@
 
 	dotnetbase.elements = {}
 	dotnetbase.langObj = {}
+	dotnetbase.netcore = {}
 
+	dotnetbase.targetFormats = {}
+	dotnetbase.targetFormats.framework = {}
+	dotnetbase.targetFormats.core = {}
+	dotnetbase.targetFormats.standard = {}
 
 --
 -- Generate a Visual Studio 200x dotnet project, with support for the new platforms API.
@@ -690,7 +695,7 @@
 	function dotnetbase.targetFrameworkVersion(cfg)
 		local action = p.action.current()
 		local framework = cfg.dotnetframework or action.vstudio.targetFramework
-		if framework then
+		if framework and dotnetbase.getTargetFormat(cfg) == dotnetbase.targetFormats.framework then
 			_p(2,'<TargetFrameworkVersion>v%s</TargetFrameworkVersion>', framework)
 		end
 	end
@@ -715,3 +720,31 @@
 		end
 	end
 
+	function dotnetbase.getTargetFormat(cfg)
+		local framework = cfg.dotnetframework or action.vstudio.targetFramework
+		if not framework then
+			return dotnetbase.targetFormats.framework
+		end
+
+		if framework:find('^netcoreapp') >= 0 then
+			return dotnetbase.targetFormats.core
+		end
+		
+		if framework:find('^netstandard') >= 0 then
+			return dotnetbase.targetFormats.standard
+		end
+
+		return dotnetbase.targetFormats.framework
+	end
+
+	function dotnetbase.netcore.targetFramework(cfg)
+		local action = p.action.current()
+		local framework = cfg.dotnetframework or action.vstudio.targetFramework
+		if framework and dotnetbase.getTargetFormat(cfg) ~= dotnetbase.targetFormats.framework then
+			_p(2,'<TargetFramework>%s</TargetFramework>', framework)
+		end
+	end
+
+	function dotnetbase.netcore.enableDefaultCompileItems(cfg)
+		_p(2,'<EnableDefaultCompileItems>false</EnableDefaultCompileItems>')
+	end
