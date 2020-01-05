@@ -740,7 +740,11 @@
 	end
 
 	function dotnetbase.isNewFormatProject(cfg)
-		local framework = cfg.dotnetframework or action.vstudio.targetFramework
+		if not cfg then
+			return false
+		end
+
+		local framework = cfg.dotnetframework
 		if not framework then
 			return false
 		end
