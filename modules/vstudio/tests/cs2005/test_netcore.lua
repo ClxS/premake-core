@@ -22,14 +22,29 @@ function suite.setup()
     language "C#"
 end
 
-local function prepare()
+local function targetFrameworkPrepare()
     local cfg = test.getconfig(prj, "Debug")
     dn2005.netcore.targetFramework(cfg)
 end
 
+local function targetFrameworkVersionPrepare()
+    local cfg = test.getconfig(prj, "Debug")
+    dn2005.targetFrameworkVersion(cfg)
+end
+
+local function prepareNetcore()
+    dn2005.projectElement(prj)
+end
+
+function suite.targetFrameworkProperty_framework()
+    dotnetframework "4.7.2"
+    targetFrameworkPrepare()
+    test.isemptycapture()
+end
+
 function suite.targetFrameworkProperty_core()
     dotnetframework "netcoreapp2.2"
-    prepare()
+    targetFrameworkPrepare()
     test.capture [[
 		<TargetFramework>netcoreapp2.2</TargetFramework>
 	]]
@@ -37,15 +52,52 @@ end
 
 function suite.targetFrameworkProperty_standard()
     dotnetframework "netstandard1.2"
-    prepare()
+    targetFrameworkPrepare()
     test.capture [[
 		<TargetFramework>netstandard1.2</TargetFramework>
     ]]
 end
 
-function suite.targetFrameworkProperty_framework()
+function suite.targetFrameworkVersionProperty_framework()
     dotnetframework "4.7.2"
-    prepare()
+    targetFrameworkVersionPrepare()
     test.capture [[
+		<TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    ]]
+end
+
+function suite.targetFrameworkVersionProperty_core()
+    dotnetframework "netcoreapp2.2"
+    targetFrameworkVersionPrepare()
+    test.isemptycapture()
+end
+
+function suite.targetFrameworkVersionProperty_standard()
+    dotnetframework "netstandard1.2"
+    targetFrameworkVersionPrepare()
+    test.isemptycapture()
+end
+
+function suite.project_element_standard()
+    dotnetframework "netstandard1.2"
+    prepareNetcore()
+    test.capture [[
+<Project Sdk="Microsoft.NET.Sdk">
+    ]]
+end
+
+function suite.project_element_core()
+    dotnetframework "netcoreapp1.2"
+    prepareNetcore()
+    test.capture [[
+<Project Sdk="Microsoft.NET.Sdk">
+    ]]
+end
+
+function suite.project_element_framework()
+    dotnetframework "4.7.2"
+    prepareNetcore()
+    test.capture [[
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     ]]
 end
